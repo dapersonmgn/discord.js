@@ -997,7 +997,7 @@ declare module 'discord.js' {
     public embeds: MessageEmbed[];
     public readonly guild: Guild | null;
     public id: Snowflake;
-    public readonly member: GuildMember | null;
+    public readonly member: GuildMember;
     public mentions: MessageMentions;
     public nonce: string | null;
     public readonly partial: false;
@@ -2286,13 +2286,13 @@ declare module 'discord.js' {
     inviteCreate: [Invite];
     inviteDelete: [Invite];
     message: [Message];
-    messageDelete: [Message | PartialMessage];
-    messageReactionRemoveAll: [Message | PartialMessage];
+    messageDelete: [Message]; // Partial
+    messageReactionRemoveAll: [Message]; //Partial
     messageReactionRemoveEmoji: [MessageReaction];
-    messageDeleteBulk: [Collection<Snowflake, Message | PartialMessage>];
-    messageReactionAdd: [MessageReaction, User | PartialUser];
-    messageReactionRemove: [MessageReaction, User | PartialUser];
-    messageUpdate: [Message | PartialMessage, Message | PartialMessage];
+    messageDeleteBulk: [Collection<Snowflake, Message>]; // Partial
+    messageReactionAdd: [MessageReaction, User]; // Partial user
+    messageReactionRemove: [MessageReaction, User]; // Partial user
+    messageUpdate: [Message, Message]; // Partial message twice
     presenceUpdate: [Presence | undefined, Presence];
     rateLimit: [RateLimitData];
     ready: [];
