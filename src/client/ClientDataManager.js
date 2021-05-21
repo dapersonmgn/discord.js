@@ -76,6 +76,8 @@ class ClientDataManager {
           case Constants.ChannelTypes.STORE:
             channel = new StoreChannel(guild, data);
             break;
+          default:
+            return;
         }
 
         guild.channels.set(channel.id, channel);
