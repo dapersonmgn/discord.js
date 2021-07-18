@@ -116,10 +116,10 @@ class SequentialRequestHandler extends RequestHandler {
               });
             }
             // https://github.com/discord/discord-api-docs/issues/182
-            // Reactions can be faster than what is returned.
-            const delay = this.requestResetTime - (item.request.path.includes('reaction') ?
-                            Date.now() + this.timeDifference + 750 + this.client.options.restTimeOffset : 
-                            Date.now() + this.timeDifference + this.client.options.restTimeOffset);
+            // Reactions can be faster than what is returned. (250ms/1 reaction)
+            const delay = item.request.path.includes('reaction') ?
+              250 + this.client.options.restTimeOffset :
+              this.requestResetTime - Date.now() + this.timeDifference + this.client.options.restTimeOffset;
             this.client.setTimeout(
               () => resolve(data),
               delay
