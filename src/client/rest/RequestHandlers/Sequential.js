@@ -65,6 +65,14 @@ class SequentialRequestHandler extends RequestHandler {
         }
         if (err) {
           if (err.status === 429) {
+            
+            // Just in case our fix is hitting the rate limit and I need to go back to the drawing board
+            if (item.request.path.includes('reaction')) {
+              console.error('API 429 error regarding reactions. Contact DaPerson if you see this.');
+            }
+
+
+
             this.queue.unshift(item);
             this.client.setTimeout(() => {
               this.globalLimit = false;
@@ -107,9 +115,14 @@ class SequentialRequestHandler extends RequestHandler {
                 method: item.request.method,
               });
             }
+            // https://github.com/discord/discord-api-docs/issues/182
+            // Reactions can be faster than what is returned.
+            const delay = this.requestResetTime - (item.request.path.includes('reaction') ?
+                            Date.now() + this.timeDifference + 750 + this.client.options.restTimeOffset : 
+                            Date.now() + this.timeDifference + this.client.options.restTimeOffset);
             this.client.setTimeout(
               () => resolve(data),
-              this.requestResetTime - Date.now() + this.timeDifference + this.client.options.restTimeOffset
+              delay
             );
           } else {
             resolve(data);
